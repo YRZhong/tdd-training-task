@@ -66,6 +66,7 @@
                 message: '价值不符合要求',
                 type: 'error'
               })
+              this.showCard = false
               return
             }
             //普通商品
@@ -78,14 +79,30 @@
                 }
                 else {
                   quality -= 2
-                  sellin --
+                  sellin--
                   if (quality > 0) {
                     this.arr.push(quality)
                   }
                 }
               }
               this.showCard = true
-              console.log(this.arr)
+            }
+            //后台门票
+            else {
+              while(sellin >= 0) {
+                if (sellin >5 && sellin <= 10) {
+                  sellin--
+                  quality = Number(quality) + 2
+                  this.arr.push(quality)
+                }
+                else if (sellin <= 5 && sellin > 0) {
+                  sellin--
+                  quality = Number(quality) + 3
+                  this.arr.push(quality)
+                }
+                else this.arr.push(0)
+              }
+              this.showCard = true
             }
           }
         }

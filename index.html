@@ -3,19 +3,90 @@
   <head>
     <title>Tdd Task</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+    />
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   </head>
 
   <body>
     <div id="app">
-      {{ message }}
+      <el-form>
+        <el-form-item label="商品类型">
+          <el-select v-model="type">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-options>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="距离过期天数">
+          <el-input v-model="sellin" style="width: 10rem;"></el-input>
+        </el-form-item>
+        <el-form-item label="初始价值">
+          <el-input v-model="quality" style="width: 10rem;"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="this.getValueTend">计算</el-button>
+        </el-form-item>
+      </el-form>
+
+      <el-card style="width: 20rem; margin-top: 2rem;" v-if="showCard">
+        <div v-for="(item, index) in arr">
+          {{`第${index}天的价值：${item}`}}
+        </div>
+      </el-card>
     </div>
 
     <script>
       var app = new Vue({
         el: '#app',
         data: {
-          message: 'init complete',
+          showCard: false,
+          type: 'normal',
+          sellin: 0,
+          quality: 0,
+          options: [{
+            value: 'normal',
+            label: '普通商品'
+          },
+          {
+            value: 'backstage',
+            label: '后台门票'
+          }],
+          arr: []
         },
+        methods: {
+          getValueTend() {
+            this.arr = []
+            let sellin = this.sellin
+            let quality = this.quality
+            if (this.quality < 0 || this.quality > 50) {
+              this.$message({
+                message: '价值不符合要求',
+                type: 'error'
+              })
+              return
+            }
+            if (this.type === 'normal') {
+              while(quality > 0) {
+                if (sellin >= 0) {
+                  quality--
+                  sellin--
+                  this.arr.push(quality)
+                }
+                else {
+                  quality -= 2
+                  sellin --
+                  if (quality > 0) {
+                    this.arr.push(quality)
+                  }
+                }
+              }
+              this.showCard = true
+              console.log(this.arr)
+            }
+          }
+        }
       })
     </script>
   </body>

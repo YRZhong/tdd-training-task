@@ -57,9 +57,10 @@
         },
         methods: {
           getValueTend() {
-            this.arr = []
+            this.arr = [] //清空记录
             let sellin = this.sellin
             let quality = this.quality
+            //校验输入
             if (this.quality < 0 || this.quality > 50) {
               this.$message({
                 message: '价值不符合要求',
@@ -67,6 +68,7 @@
               })
               return
             }
+            //普通商品
             if (this.type === 'normal') {
               while(quality > 0) {
                 if (sellin >= 0) {
